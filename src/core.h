@@ -3,48 +3,55 @@
 
 #include <stdio.h>
 
-/* ANSI text attributes */
-
-#define OFF		0
-#define BOLD	1
-#define UNDRSCR	4
-#define BLINK	5
-#define REV_VID	7
-#define CONCEAL	8
-
-/* ISO 6429 ANSI color sequences */
-
-#define BLK_FORE 30
-#define RED_FORE 31
-#define GRN_FORE 32
-#define YLW_FORE 33
-#define BLU_FORE 34
-#define MAG_FORE 35
-#define CYN_FORE 36
-#define WHT_FORE 37
-
-#define BLK_BACK 40
-#define RED_BACK 41
-#define GRN_BACK 42
-#define YLW_BACK 43
-#define BLU_BACK 44
-#define MAG_BACK 45
-#define CYN_BACK 46
-#define WHT_BACK 47
-
 /* BOX characters */
 
 #define BOX_COR " "
 #define BOX_HOR "="
 #define BOX_VER "|"
 
+/* ANSI text attributes */
+typedef enum
+{
+	OFF		= 0,
+	BOLD	= 1,
+	UNDRSCR	= 4,
+	BLINK	= 5,
+	REV_VID	= 7,
+	CONCEAL	= 8
+} ATTR;
+
+/* ISO 6429 ANSI color sequences */
+typedef enum
+{
+	BLK = 30,
+	RED = 31,
+	GRN = 32,
+	YLW = 33,
+	BLU = 34,
+	MAG = 35,
+	CYN = 36,
+	WHT = 37
+} FORE;
+
+typedef enum
+{
+	BLK_BACK = 40,
+	RED_BACK = 41,
+	GRN_BACK = 42,
+	YLW_BACK = 43,
+	BLU_BACK = 44,
+	MAG_BACK = 45,
+	CYN_BACK = 46,
+	WHT_BACK = 47
+} BACK;
 
 typedef struct
 {
 	int curX;				/* line position of cursor */
 	int curY;				/* column position of cursor */
-	int fore;				/* foreground text color */
-	int back;				/* background text color */
+	ATTR attr;				/* text attribute */
+	FORE fore;				/* foreground text color */
+	BACK back;				/* background text color */
 } GUI;
 
 /* exit handler */
@@ -61,13 +68,13 @@ void cur_pos(int,			/* cursor line position */
 void attr_none(GUI*);		/* GUI struct */
 
 void text_attr(GUI*,		/* GUI struct */
-			   int);		/* text attribute */
+			   ATTR);		/* text attribute */
 
 void text_fore(GUI*,		/* GUI struct */
-			   int);		/* ISO 6429 color code */
+			   FORE);		/* ISO 6429 color code */
 
 void text_back(GUI*,		/* GUI struct */
-			   int);		/* ISO 6429 color code */
+			   BACK);		/* ISO 6429 color code */
 
 /* rendering */
 

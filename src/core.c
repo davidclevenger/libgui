@@ -35,6 +35,7 @@ GUI_init(GUI* gui)
 
 	gui->curX = 0;
 	gui->curY = 0;
+	gui->attr = -1;
 	gui->fore = -1;
 	gui->back = -1;
 }
@@ -51,30 +52,34 @@ void
 attr_none(GUI* gui)
 {
 	printf("\x1B[0m");
+	gui->attr = -1;
 }
 
 void
-text_attr(GUI* gui, int attr)
+text_attr(GUI* gui, ATTR attr)
 {
 	if( attr < 0 || attr > 8 ) return;
 
 	printf("\x1B[%dm", attr);
+	gui->attr = attr;
 }
 
 void
-text_fore(GUI* gui, int fore)
+text_fore(GUI* gui, FORE fore)
 {
 	if( fore < 30 || fore > 37 ) return;
 
 	printf("\x1B[%dm", fore);
+	gui->fore = fore;
 }
 
 void
-text_back(GUI* gui, int back)
+text_back(GUI* gui, BACK back)
 {
 	if( back < 40 || back > 47 ) return;
 
 	printf("\x1B[%dm", back);
+	gui->back = back;
 }
 
 /* rendering */
@@ -91,7 +96,6 @@ draw_box(int x, int y, int w, int h)
 {
 	int i;
 	int j;
-	char buf[1024];
 
 	/* set the cursor position */
 	cur_pos(x, y);
@@ -126,4 +130,7 @@ draw_box(int x, int y, int w, int h)
 		printf(BOX_HOR);
 	}
 	printf(BOX_COR);
+
+	/* force write */
+	fflush(stdout);
 }
