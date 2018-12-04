@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wpedantic -Wextra
+CFLAGS = 
 
 SRC = ../src
 SRCS = $(SRC)/core.o

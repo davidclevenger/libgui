@@ -8,11 +8,44 @@ extern "C"
 
 #include <stdio.h>
 
-/* BOX characters */
+/* safe pritnf macro */
+#define DRAW(str) do { printf("%s",str); } while(0)
 
-#define BOX_COR " "
-#define BOX_HOR "-"
-#define BOX_VER "|"
+/* single box characters */
+#define BOX_TLC_S	"┌"
+#define BOX_TRC_S	"┐"
+#define BOX_BLC_S	"└"
+#define BOX_BRC_S	"┘"
+#define BOX_VER_S	"│"
+#define BOX_HOR_S	"─"
+#define BOX_LT_S	"┤"
+#define BOX_RT_S	"├"
+#define BOX_DT_S	"┬"
+#define BOX_UT_S	"┴"
+#define BOX_MT_S	"┼"
+
+/* double box characters */
+#define BOX_TLC_D	"╔"
+#define BOX_TRC_D	"╗"
+#define BOX_BLC_D	"╚"
+#define BOX_BRC_D	"╝"
+#define BOX_VER_D	"║"
+#define BOX_HOR_D	"═"
+#define BOX_LT_D	"╣"
+#define BOX_RT_D	"╠"
+#define BOX_DT_D	"╦"
+#define BOX_UT_D	"╩"
+#define BOX_MT_D	"╬"
+
+/* box character fallback */
+#define BOX_COR_F	"="
+#define BOX_VER_F	"|"
+#define BOX_HOR_F	"="
+
+/* gradient characters */
+#define GRAD_L		"░"
+#define GRAD_M		"▒"
+#define GRAD_H		"▓"
 
 /* ANSI text attributes */
 typedef enum
@@ -87,11 +120,35 @@ void text_back(GUI*,		/* GUI struct */
 
 void clear();				/* clear the terminal */
 
+void grad_fill(int,			/* top left corner line */ 
+			   int,			/* tope left corner column */
+			   int,			/* int width (overall) */
+			   int,			/* int height (overall) */
+			   const char);	/* mode (l - light, m - medium, h - heavy) */
+
 void draw_box(int,			/* top left corner line */
 			  int,			/* top left corner column */
 			  int,			/* int width (inside box) */
-			  int);			/* int height (inside box) */
+			  int,			/* int height (inside box) */
+			  const char);	/* mode (s - single, d - double, f - fallback) */
 
+/* mode specific box drawing */
+static void draw_box_s(int,
+					   int,
+					   int,
+					   int);
+
+
+static void draw_box_d(int,
+					   int,
+					   int,
+					   int);
+
+
+static void draw_box_f(int,
+					   int,
+					   int,
+					   int);
 #endif
 
 #ifdef __cplusplus

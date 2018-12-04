@@ -6,7 +6,7 @@
 
 /* exit handler */
 
-void
+	void
 GUI_cleanup(void)
 {
 	/* clear all attributes */
@@ -20,7 +20,7 @@ GUI_cleanup(void)
 
 /* functional */
 
-void
+	void
 GUI_init(GUI* gui)
 {
 	/* register cleanup handler */
@@ -92,45 +92,177 @@ clear()
 }
 
 void
-draw_box(int x, int y, int w, int h)
+grad_fill(int x, int y, int w, int h, const char mode)
 {
 	int i;
 	int j;
 
-	/* set the cursor position */
+	char* pick = GRAD_M; /* default fill */
+	
+	switch(mode)
+	{
+		case 'l':
+			pick = GRAD_L; 
+			break;
+
+		case 'm':
+			pick = GRAD_M;
+			break;
+
+		case 'h':
+			pick = GRAD_H;
+			break;
+	}
+
+	for(i = 0; i < h; i++)
+	{
+		cur_pos(x + i, y);
+		for(j = 0; j < w; j++)
+		{
+			DRAW(pick);
+		}
+	}
+
+	fflush(stdout);
+}
+
+void
+draw_box(int x, int y, int w, int h, const char mode)
+{
+	/* set the drawing location */
 	cur_pos(x, y);
 
+	switch(mode)
+	{
+		case 's': /* single box */
+			draw_box_s(x, y, w, h);
+			break;
+
+		case 'd': /* double box */
+			draw_box_d(x, y, w, h);
+			break;
+
+		case 'f': /* fallback box */
+			draw_box_f(x, y, w, h);
+			break;
+
+		default: /* fallback box */
+			draw_box_f(x, y, w, h);
+			break;
+	}
+
+	/* force write */
+	fflush(stdout);
+}
+
+static void
+draw_box_s(int x, int y, int w, int h)
+{
+	int i;
+	int j;
+
 	/* first layer */
-	printf(BOX_COR);
+	DRAW(BOX_TLC_S);
 	for(i = 0; i < w; i++)
 	{
-		printf(BOX_HOR);
+		DRAW(BOX_HOR_S);
 	}
-	printf(BOX_COR);
+	DRAW(BOX_TRC_S);
 
-	/* middle layer(s) */
+	/* middle layers */
 	for(j = 0; j < h; j++)
 	{
-	
 		cur_pos(x+j+1, y);
-		printf(BOX_VER);
+		DRAW(BOX_VER_S);
 		for(i = 0; i < w; i++)
 		{
 			printf(" ");
 		}
-		printf(BOX_VER);
+		DRAW(BOX_VER_S);
+	}
+
+	cur_pos(x+j+1, y);
+	
+	/* last layer */
+	DRAW(BOX_BLC_S);
+	for(i = 0; i < w; i++)
+	{
+		DRAW(BOX_HOR_S);
+	}
+	DRAW(BOX_BRC_S);
+}
+
+static void
+draw_box_d(int x, int y, int w, int h)
+{
+	int i;
+	int j;
+
+	/* first layer */
+	DRAW(BOX_TLC_D);
+	for(i = 0; i < w; i++)
+	{
+		DRAW(BOX_HOR_D);
+	}
+	DRAW(BOX_TRC_D);
+
+	/* middle layers */
+	for(j = 0; j < h; j++)
+	{
+		cur_pos(x+j+1, y);
+		DRAW(BOX_VER_D);
+		for(i = 0; i < w; i++)
+		{
+			printf(" ");
+		}
+		DRAW(BOX_VER_D);
+	}
+
+	cur_pos(x+j+1, y);
+	
+	/* last layer */
+	DRAW(BOX_BLC_D);
+	for(i = 0; i < w; i++)
+	{
+		DRAW(BOX_HOR_D);
+	}
+	DRAW(BOX_BRC_D);
+}
+
+static void
+draw_box_f(int x, int y, int w, int h)
+{
+	int i;
+	int j;
+
+	/* first layer */
+	DRAW(BOX_COR_F);
+	for(i = 0; i < w; i++)
+	{
+		DRAW(BOX_HOR_F);
+	}
+	DRAW(BOX_COR_F);
+
+	/* middle layer(s) */
+	for(j = 0; j < h; j++)
+	{
+
+		cur_pos(x+j+1, y);
+		DRAW(BOX_VER_F);
+		for(i = 0; i < w; i++)
+		{
+			printf(" ");
+		}
+		DRAW(BOX_VER_F);
 	}
 
 	cur_pos(x+j+1, y);
 
 	/* last layer */
-	printf(BOX_COR);
+	DRAW(BOX_COR_F);
 	for(i = 0; i < w; i++)
 	{
-		printf(BOX_HOR);
+		DRAW(BOX_HOR_F);
 	}
-	printf(BOX_COR);
-
-	/* force write */
-	fflush(stdout);
+	DRAW(BOX_COR_F);
 }
