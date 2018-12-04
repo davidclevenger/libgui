@@ -1,3 +1,8 @@
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #ifndef __CORE_H__
 #define __CORE_H__
 
@@ -6,7 +11,7 @@
 /* BOX characters */
 
 #define BOX_COR " "
-#define BOX_HOR "="
+#define BOX_HOR "-"
 #define BOX_VER "|"
 
 /* ANSI text attributes */
@@ -23,6 +28,7 @@ typedef enum
 /* ISO 6429 ANSI color sequences */
 typedef enum
 {
+	NON = -1,
 	BLK = 30,
 	RED = 31,
 	GRN = 32,
@@ -35,6 +41,7 @@ typedef enum
 
 typedef enum
 {
+	NON_BACK = -1,
 	BLK_BACK = 40,
 	RED_BACK = 41,
 	GRN_BACK = 42,
@@ -85,4 +92,8 @@ void draw_box(int,			/* top left corner line */
 			  int,			/* int width (inside box) */
 			  int);			/* int height (inside box) */
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

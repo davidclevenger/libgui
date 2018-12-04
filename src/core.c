@@ -35,9 +35,9 @@ GUI_init(GUI* gui)
 
 	gui->curX = 0;
 	gui->curY = 0;
-	gui->attr = -1;
-	gui->fore = -1;
-	gui->back = -1;
+	gui->attr = OFF;
+	gui->fore = NON;
+	gui->back = NON_BACK;
 }
 
 void
