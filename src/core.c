@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include "core.h"
 
 /* exit handler */
 
-	void
-GUI_cleanup(void)
+void
+gui_cleanup(void)
 {
 	/* clear all attributes */
 	printf("\x1B[0m");
@@ -18,26 +19,30 @@ GUI_cleanup(void)
 	clear();
 }
 
+void
+cleanup_wrap(int status)
+{
+	gui_cleanup();
+	exit(status);
+}
+
 /* functional */
 
-	void
-GUI_init(GUI* gui)
+void
+gui_init()
 {
 	/* register cleanup handler */
-	if( atexit(GUI_cleanup) != 0 )
+	if( atexit(gui_cleanup) != 0 )
 	{
 		fprintf(stderr, "Init failure\n");
 		exit(1);
 	}
 
+	signal(SIGINT, cleanup_wrap);
+	signal(SIGTERM, cleanup_wrap);
+
 	clear();
 	cur_pos(0,0);
-
-	gui->curX = 0;
-	gui->curY = 0;
-	gui->attr = OFF;
-	gui->fore = NON;
-	gui->back = NON_BACK;
 }
 
 void
@@ -46,40 +51,37 @@ cur_pos(int x, int y)
 	if( x < 0 || y < 0 ) return;
 
 	printf("\x1B[%d;%dH", x, y);
+	fflush(stdout);
 }
 
 void
-attr_none(GUI* gui)
+attr_none()
 {
 	printf("\x1B[0m");
-	gui->attr = -1;
 }
 
 void
-text_attr(GUI* gui, ATTR attr)
+attr(ATTR attr)
 {
 	if( attr < 0 || attr > 8 ) return;
 
 	printf("\x1B[%dm", attr);
-	gui->attr = attr;
 }
 
 void
-text_fore(GUI* gui, FORE fore)
+fore(FORE fore)
 {
 	if( fore < 30 || fore > 37 ) return;
 
 	printf("\x1B[%dm", fore);
-	gui->fore = fore;
 }
 
 void
-text_back(GUI* gui, BACK back)
+back(BACK back)
 {
 	if( back < 40 || back > 47 ) return;
 
 	printf("\x1B[%dm", back);
-	gui->back = back;
 }
 
 /* rendering */

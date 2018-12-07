@@ -5,113 +5,111 @@
 
 int main()
 {
-	GUI gui;
-
-	/* initialize gui and clear screen */
-	GUI_init(&gui);
+	/* initialize and clear screen */
+	gui_init();
 	clear();
 
 	/* test each foreground color */
-	text_fore(&gui, BLK);
+	fore(BLK);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
-	text_fore(&gui, RED);
+	fore(RED);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
-	text_fore(&gui, GRN);
+	fore(GRN);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
-	text_fore(&gui, BLU);
+	fore(BLU);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
-	text_fore(&gui, MAG);
+	fore(MAG);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
-	text_fore(&gui, CYN);
+	fore(CYN);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
-	text_fore(&gui, WHT);
+	fore(WHT);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
 	/* remove attributes */
-	attr_none(&gui);
+	attr_none();
 
 	/* test each backgroud color */
-	text_back(&gui, BLK_BACK);
+	back(BLK_BACK);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
-	text_back(&gui, RED_BACK);
+	back(RED_BACK);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
-	text_back(&gui, GRN_BACK);
+	back(GRN_BACK);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
-	text_back(&gui, YLW_BACK);
+	back(YLW_BACK);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
-	text_back(&gui, BLU_BACK);
+	back(BLU_BACK);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
-	text_back(&gui, MAG_BACK);
+	back(MAG_BACK);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
-	text_back(&gui, CYN_BACK);
+	back(CYN_BACK);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
-	text_back(&gui, WHT_BACK);
+	back(WHT_BACK);
 	draw_box(1, 0, 4, 4, 'f');
 	sleep(1);
 
 	/* reset attributes */
-	attr_none(&gui);
+	attr_none();
 	clear();
 
 	/* test each text attribute */
-	text_attr(&gui, BOLD);
+	attr(BOLD);
 	printf("bold\n");
 	sleep(1);
-	attr_none(&gui);
+	attr_none();
 
-	text_attr(&gui, UNDRSCR);
+	attr(UNDRSCR);
 	printf("underscore\n");
 	sleep(1);
-	attr_none(&gui);
+	attr_none();
 	
-	text_attr(&gui, BLINK);
+	attr(BLINK);
 	printf("blink\n");
 	sleep(3);
-	attr_none(&gui);
+	attr_none();
 
-	text_attr(&gui, REV_VID);
+	attr(REV_VID);
 	printf("reverse video\n");
 	sleep(1);
-	attr_none(&gui);
+	attr_none();
 
-	text_attr(&gui, CONCEAL);
-	text_back(&gui, RED_BACK); /* show that text is concealed */
+	attr(CONCEAL);
+	back(RED_BACK); /* show that text is concealed */
 	printf("conceal\n");
 	sleep(1);
-	attr_none(&gui);
+	attr_none();
 
 	clear();
 
 	/* single box */
 
-	text_fore(&gui, BLU);
+	fore(BLU);
 
 	draw_box(1, 0, 4, 4, 's');
 	sleep(1);

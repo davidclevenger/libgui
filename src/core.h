@@ -85,36 +85,26 @@ typedef enum
 	WHT_BACK = 47
 } BACK;
 
-typedef struct
-{
-	int curX;				/* line position of cursor */
-	int curY;				/* column position of cursor */
-	ATTR attr;				/* text attribute */
-	FORE fore;				/* foreground text color */
-	BACK back;				/* background text color */
-} GUI;
-
 /* exit handler */
 
-void GUI_cleanup(void);		/* reset all */
+void gui_cleanup(void);		/* reset all */
+
+void cleanup_wrap(int);
 
 /* functional */
 
-void GUI_init(GUI*);		/* GUI struct */
+void gui_init();
 
 void cur_pos(int,			/* cursor line position */
 			 int);			/* cursor column position */
 
-void attr_none(GUI*);		/* GUI struct */
+void attr_none();
 
-void text_attr(GUI*,		/* GUI struct */
-			   ATTR);		/* text attribute */
+void attr(ATTR);			/* text attribute */
 
-void text_fore(GUI*,		/* GUI struct */
-			   FORE);		/* ISO 6429 color code */
+void fore(FORE);			/* ISO 6429 color code */
 
-void text_back(GUI*,		/* GUI struct */
-			   BACK);		/* ISO 6429 color code */
+void back(BACK);			/* ISO 6429 color code */
 
 /* rendering */
 
