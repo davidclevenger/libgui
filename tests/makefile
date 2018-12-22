@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = 
 
 SRC = ../src
-SRCS = $(SRC)/core.o
+SRCS = $(SRC)/gui.o
 TESTS = $(wildcard *.c)
 OBJS = $(patsubst %.c, %.o, $(TESTS))
 PROGS = $(patsubst %.c, %, $(TESTS))

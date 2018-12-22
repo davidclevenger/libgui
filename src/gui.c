@@ -2,8 +2,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <termios.h>
 
-#include "core.h"
+#include "gui.h"
+
+struct termios preserve;
 
 /* exit handler */
 
@@ -22,6 +25,7 @@ gui_cleanup(void)
 void
 cleanup_wrap(int status)
 {
+	std_mode();
 	gui_cleanup();
 	exit(status);
 }
@@ -29,9 +33,15 @@ cleanup_wrap(int status)
 /* functional */
 
 void
-gui_init()
+gui_init(void)
 {
-	/* register cleanup handler */
+	/* register cleanup handlers */
+	if( atexit(std_mode) != 0 )
+	{
+		fprintf(stderr, "Init failure\n");
+		exit(1);
+	}
+
 	if( atexit(gui_cleanup) != 0 )
 	{
 		fprintf(stderr, "Init failure\n");
@@ -55,7 +65,7 @@ cur_pos(int x, int y)
 }
 
 void
-attr_none()
+attr_none(void)
 {
 	printf("\x1B[0m");
 }
@@ -84,10 +94,38 @@ back(BACK back)
 	printf("\x1B[%dm", back);
 }
 
+/* terminal interface */
+
+void
+std_mode(void)
+{
+	static int called = 0;
+
+	if( !called )
+	{
+		tcgetattr(STDIN_FILENO, &preserve);
+	}
+
+	/* restore the original configuration */
+	tcsetattr(STDIN_FILENO, TCSAFLUSH, &preserve);
+}
+
+void
+raw_mode(void)
+{
+	struct termios term;
+
+	/* get current state and set raw flags */
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag &= ~(ECHO | ICANON);
+
+	tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
+}
+
 /* rendering */
 
 void
-clear()
+clear(void)
 {
 	printf("\x1B[2J");
 	cur_pos(0, 0);
@@ -268,3 +306,4 @@ draw_box_f(int x, int y, int w, int h)
 	}
 	DRAW(BOX_COR_F);
 }
+

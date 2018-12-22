@@ -1,7 +1,7 @@
 #include <stdio.h> 	/* printf */
 #include <unistd.h>	/* sleep */
 
-#include "core.h"
+#include "gui.h"
 
 int main()
 {
