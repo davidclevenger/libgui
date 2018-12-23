@@ -8,8 +8,8 @@ extern "C"
 
 #include <stdio.h>
 
-/* safe pritnf macro */
-#define DRAW(str) do { printf("%s",str); } while(0)
+/* safe printf macro */
+#define DRAW(str) do { printf("%s", str); } while(0)
 
 /* single box characters */
 #define BOX_TLC_S	"┌"
