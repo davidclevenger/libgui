@@ -51,6 +51,10 @@ gui_init(void)
 	signal(SIGINT, cleanup_wrap);
 	signal(SIGTERM, cleanup_wrap);
 
+	/* preserve terminal configuration */
+	std_mode();
+
+	/* clear screen and position cursor */
 	clear();
 	cur_pos(0,0);
 }
@@ -105,6 +109,9 @@ std_mode(void)
 	{
 		tcgetattr(STDIN_FILENO, &preserve);
 	}
+
+	/* ensure terminal configuration is preserved */
+	called = 1;
 
 	/* restore the original configuration */
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &preserve);
