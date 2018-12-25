@@ -112,6 +112,10 @@ void std_mode(void);
 
 void raw_mode(void);
 
+/* bell */
+
+void bell(void);
+
 /* rendering */
 
 void clear(void);				/* clear the terminal */

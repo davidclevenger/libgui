@@ -129,6 +129,15 @@ raw_mode(void)
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
 }
 
+/* bell */
+
+void bell(void)
+{
+	char c = 7; /* bell character */
+	printf("%c", c);
+	fflush(stdout);
+}
+
 /* rendering */
 
 void

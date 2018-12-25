@@ -256,6 +256,9 @@ int main()
 	win = play(&game);
 	clear();
 
+	/* alert player */
+	bell();
+
 	if( win == HUM )
 	{
 		printf("You won!\n");
