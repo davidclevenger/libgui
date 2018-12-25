@@ -73,16 +73,16 @@ void pickSpot(Game* game, int player)
 {
 	int i, j;
 	int choice = 0;
-	char s[3];
+	char s;
 	int done = 0;
 
 	if( player == HUM )
 	{
 		raw_mode();
 
-		while( !done && read(STDIN_FILENO, &s, 3) >= 1 )
+		while( !done && read(STDIN_FILENO, &s, 1) == 1 )
 		{
-			if( !strcmp(s, DOWN) )
+			if( s == DOWN )
 			{
 				if( game->board[0][game->choice] == UNUSED )
 				{
@@ -98,16 +98,20 @@ void pickSpot(Game* game, int player)
 					}
 				}
 			}
-			if( !strcmp(s, LEFT) && game->choice > 0)
+			else if( s == LEFT && game->choice > 0)
 			{
 				--(game->choice);
 				update(game);
 
 			}
-			else if( !strcmp(s, RIGHT)  && game->choice < BOARD_COL-1)
+			else if( s == RIGHT && game->choice < BOARD_COL-1)
 			{
 				++(game->choice);
 				update(game);
+			}
+			else if( s == 'q' )
+			{
+				exit(0);
 			}
 		}
 

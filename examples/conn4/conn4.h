@@ -14,9 +14,9 @@
 #define HUM 1
 
 /* arrow keys */
-#define DOWN "\033[B"
-#define RIGHT "\033[C"
-#define LEFT "\033[D"
+#define DOWN 's'
+#define RIGHT 'd'
+#define LEFT 'a'
 
 typedef struct
 {
