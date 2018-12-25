@@ -6,4 +6,4 @@ Dependency-free, Text-based GUI Library written in ANSI C.
 ## Supports
 * OSX
 * Linux
-* Windows (probably)
+* Windows (Cygwin)
