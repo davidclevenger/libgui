@@ -5,6 +5,10 @@
 */
 
 #include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "gui.h"
 #include "conn4.h"
 
@@ -62,18 +66,73 @@ int foundWinner(Game* game, int* winner)
 		}
 	}
 
-	return 0 /* winner not found */
+	return 0; /* winner not found */
 }
 
 void pickSpot(Game* game, int player)
 {
+	int i, j;
+	int choice = 0;
+	char s[2];
+	int done = 0;
+
 	if( player == HUM )
 	{
+		raw_mode();
 
+		while( read(STDIN_FILENO, &s, 2) >= 1  && !done )
+		{
+			if( !strcmp(s, DOWN) )
+			{
+				if( game->board[0][game->choice] == UNUSED )
+				{
+					/* drop */
+					for(i = BOARD_ROW-1; i >= 0; i--)
+					{
+						if( game->board[i][game->choice] == UNUSED )
+						{
+							game->board[i][game->choice] = R;
+							done = 1;
+							break;
+						}
+					}
+				}
+			}
+			if( !strcmp(s, LEFT) && choice > 0)
+			{
+				--(game->choice);
+				update(game);
+
+			}
+			else if( !strcmp(s, RIGHT)  && choice < BOARD_COL-1)
+			{
+				++(game->choice);
+				update(game);
+			}
+		}
+
+		std_mode();
 	}
 	else /* computer's pick */
 	{
-		
+		/* find first available column */
+		for(i = 0; i < BOARD_COL; i++)
+		{
+			if( game->board[0][i] == UNUSED)
+			{
+				break;
+			}
+		}
+
+		/* drop */
+		for( j = BOARD_ROW - 1; j >= 0; j--)
+		{
+			if( game->board[j][i] == UNUSED )
+			{
+				game->board[j][i] = B;
+				break;
+			}
+		}
 	}
 }
 
@@ -82,6 +141,14 @@ int play(Game* game)
 	int i, j;
 	int winner;
 	int turn = HUM;
+
+	gui_init();
+
+	/* fill in choice buffer */
+	for(i = 0; i < BOARD_COL; i++)
+	{
+		game->choicebuf[i] = 'X';
+	}
 
 	/* fill in board */
 	for(i = 0; i < BOARD_ROW; i++)
@@ -112,6 +179,39 @@ int play(Game* game)
 	}
 
 	return winner;
+}
+
+void update(Game* game)
+{
+	int i, j;
+	
+	clear();
+	cur_pos(1,0);
+
+	for(i = 0; i < BOARD_ROW; i++)
+	{
+		for(j = 0; j < BOARD_COL; j++)
+		{
+			switch( game->board[i][j] )
+			{
+				case UNUSED:
+					attr_none();
+					printf("%c", UNUSED);
+					break;
+
+				case R:
+					fore(RED);
+					printf("%c", R);
+					break;
+
+				case B:
+					fore(BLK);
+					printf("%c", B);
+					break;
+			}
+		}
+		printf("\n");
+	}
 }
 
 int main()
