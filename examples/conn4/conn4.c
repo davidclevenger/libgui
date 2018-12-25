@@ -73,14 +73,14 @@ void pickSpot(Game* game, int player)
 {
 	int i, j;
 	int choice = 0;
-	char s[2];
+	char s[3];
 	int done = 0;
 
 	if( player == HUM )
 	{
 		raw_mode();
 
-		while( read(STDIN_FILENO, &s, 2) >= 1  && !done )
+		while( !done && read(STDIN_FILENO, &s, 3) >= 1 )
 		{
 			if( !strcmp(s, DOWN) )
 			{
@@ -98,13 +98,13 @@ void pickSpot(Game* game, int player)
 					}
 				}
 			}
-			if( !strcmp(s, LEFT) && choice > 0)
+			if( !strcmp(s, LEFT) && game->choice > 0)
 			{
 				--(game->choice);
 				update(game);
 
 			}
-			else if( !strcmp(s, RIGHT)  && choice < BOARD_COL-1)
+			else if( !strcmp(s, RIGHT)  && game->choice < BOARD_COL-1)
 			{
 				++(game->choice);
 				update(game);
@@ -140,7 +140,9 @@ int play(Game* game)
 {
 	int i, j;
 	int winner;
-	int turn = HUM;
+	
+	game->turn = HUM;
+	game->choice = 0;
 
 	gui_init();
 
@@ -164,15 +166,15 @@ int play(Game* game)
 
 	while( !foundWinner(game, &winner) )
 	{
-		if( turn == HUM )
+		if( game->turn == HUM )
 		{
 			pickSpot(game, HUM);
-			turn = COM;
+			game->turn = COM;
 		}
 		else /* computer's turn */
 		{
 			pickSpot(game, COM);
-			turn = HUM;
+			game->turn = HUM;
 		}
 
 		update(game);
@@ -187,6 +189,34 @@ void update(Game* game)
 	
 	clear();
 	cur_pos(1,0);
+
+	if(game->turn == HUM)
+	{
+		for(i = 0; i < BOARD_COL; i++)
+		{
+			if( i != game->choice )
+			{
+				printf("X");
+			}
+			else /* is choice */
+			{
+				fore(RED);
+				printf("%c", R);
+				attr_none();
+			}
+		}
+		printf("\n");
+
+		attr_none();
+	}
+	else
+	{
+		for(i = 0; i < BOARD_COL; i++)
+		{
+			printf("X");
+		}
+		printf("\n");
+	}
 
 	for(i = 0; i < BOARD_ROW; i++)
 	{
@@ -217,16 +247,19 @@ void update(Game* game)
 int main()
 {
 	int win;
-	Game* game;
+	Game game;
 
-	win = play(game);
+	win = play(&game);
+	clear();
 
 	if( win == HUM )
 	{
 		printf("You won!\n");
+		sleep(4);
 	}
 	else
 	{
 		printf("You lost!\n");
+		sleep(4);
 	}
 }
