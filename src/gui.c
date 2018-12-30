@@ -155,7 +155,7 @@ heatmap(int** data, int r, int c, int x, int y)
     int min = INT_MAX;
     int max = INT_MIN;
 
-    cur_pos(x,y);
+    cur_pos(x,0);
 
     for( i = 0; i < r; i++)
     {
@@ -196,6 +196,7 @@ heatmap(int** data, int r, int c, int x, int y)
                 printf(GRAD_M);
             }
         }
+		printf("\n");
     }
 
     fflush(stdout);
