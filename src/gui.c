@@ -215,36 +215,52 @@ heatmap(int** data, int r, int c, int x, int y)
 }
 
 int
-optionbox(char** options, int x, int y)
+optionbox(const char** options, int x, int y)
 {
     int i, len;
     unsigned int max_len = 0;
     int choice;
     char c;
 
+	attr_none();
+
     len = 0;
-    while( options[len++] )
+    while( options[len] )
     {
         if( strlen(options[len]) > max_len)
         {
             max_len = strlen(options[len]);
         }
+		++len;
     }
 
-    draw_box(x, y, max_len, len + 2, 'd');
+    draw_box(x, y, max_len + 5, len, 'd');
     cur_pos(++x, ++y);
 
     c = '0';
     do
     {
-        if( c == 'w' && choice > 0 )
-        {
-            --choice;
-        }
-        else if( c == 's' && choice < max_len )
-        {
-            ++choice;
-        }
+		
+		switch( c )
+		{
+			case 'w':
+				if( choice > 0 )
+					--choice;
+				break;
+
+			case 'W':
+					choice = 0;
+				break;
+
+			case 's':
+				if( choice < len - 1)
+					++choice;
+				break;
+
+			case 'S':
+					choice = len - 1;
+				break;
+		}
 
         for(i = 0; i < len; ++i)
         {
@@ -252,6 +268,7 @@ optionbox(char** options, int x, int y)
             if( i == choice)
             {
                 attr(REV_VID);
+				fore(RED);
             }
             else
             {
@@ -260,6 +277,8 @@ optionbox(char** options, int x, int y)
             printf("%2d: %s", i+1, options[i]);
         }
     } while( (c = getch_raw()) != '\n');
+
+	attr_none();
 
     return choice;
 }

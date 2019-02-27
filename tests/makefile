@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = 
+CFLAGS =
 
 SRC = ../src
 SRCS = $(SRC)/gui.o

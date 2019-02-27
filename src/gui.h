@@ -124,8 +124,7 @@ void heatmap(int**,         /* data */
              int);          /* top left col index of box */
 
 /* returns selected option index */
-int optionbox(char**,      /* options array */
-               int,         /* length of array */
+int optionbox(const char**, /* options array */
                int,         /* top left row index of box */
                int);        /* top left column index of box */
 

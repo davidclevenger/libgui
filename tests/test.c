@@ -1,5 +1,6 @@
 #include <stdio.h> 	/* printf */
 #include <unistd.h>	/* sleep */
+#include <stdlib.h> /* NULL */
 
 #include "gui.h"
 
@@ -131,13 +132,14 @@ int main()
 	grad_fill(1, 0, 4, 4, 'h');
 	sleep(1);
 
-    const char* const  options[] = {
+    const char* options[] = {
         "GUIS",
         "ARE",
         "FUN!",
+		NULL
     };
 
-	int choice = optionbox(options, 3, 1, 1);
+	int choice = optionbox(options, 1, 1);
 
     printf("You chose: %d %s\n", choice, options[choice]);
 	sleep(2);
