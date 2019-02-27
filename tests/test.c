@@ -130,4 +130,16 @@ int main()
 
 	grad_fill(1, 0, 4, 4, 'h');
 	sleep(1);
+
+    const char* const  options[] = {
+        "GUIS",
+        "ARE",
+        "FUN!",
+    };
+
+	int choice = optionbox(options, 3, 1, 1);
+
+    printf("You chose: %d %s\n", choice, options[choice]);
+	sleep(2);
+
 }

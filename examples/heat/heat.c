@@ -19,7 +19,7 @@ int main()
     {
         for(j = 0; j < 10; j++)
         {
-            data[i][j] = (i*j);
+            data[i][j] = 5;// (i+j);
         }
     }
 

@@ -88,7 +88,6 @@ typedef enum
 /* exit handler */
 
 void gui_cleanup(void);     /* reset all */
-
 void cleanup_wrap(int);
 
 /* functional */
@@ -99,18 +98,16 @@ void cur_pos(int,           /* cursor line position */
              int);          /* cursor column position */
 
 void attr_none(void);
-
 void attr(ATTR);            /* text attribute */
-
 void fore(FORE);            /* ISO 6429 color code */
-
 void back(BACK);            /* ISO 6429 color code */
 
 /* terminal interface */
 
 void std_mode(void);
-
 void raw_mode(void);
+
+int getch_raw();
 
 /* bell */
 
@@ -123,8 +120,14 @@ void clear(void);           /* clear the terminal */
 void heatmap(int**,         /* data */
              int,           /* rows */
              int,           /* cols */
-             int,           /* top left row */
-             int);          /* top left col */
+             int,           /* top left row index of box */
+             int);          /* top left col index of box */
+
+/* returns selected option index */
+int optionbox(char**,      /* options array */
+               int,         /* length of array */
+               int,         /* top left row index of box */
+               int);        /* top left column index of box */
 
 void grad_fill(int,         /* top left corner line */ 
                int,         /* tope left corner column */

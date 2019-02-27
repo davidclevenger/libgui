@@ -4,6 +4,7 @@
 #include <signal.h>
 #include <termios.h>
 #include <limits.h>
+#include <string.h>
 
 #include "gui.h"
 
@@ -130,9 +131,20 @@ raw_mode(void)
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
 }
 
+int
+getch_raw()
+{
+    char c;
+    raw_mode();
+    c = getchar();
+    std_mode();
+    return c;
+}
+
 /* bell */
 
-void bell(void)
+void
+bell(void)
 {
     char c = 7; /* bell character */
     printf("%c", c);
@@ -166,7 +178,7 @@ heatmap(int** data, int r, int c, int x, int y)
                 max = data[i][j];
             }
 
-            if( data[i][j] < min )
+            else if( data[i][j] < min )
             {
                 min = data[i][j];
             }
@@ -200,6 +212,56 @@ heatmap(int** data, int r, int c, int x, int y)
     }
 
     fflush(stdout);
+}
+
+int
+optionbox(char** options, int x, int y)
+{
+    int i, len;
+    unsigned int max_len = 0;
+    int choice;
+    char c;
+
+    len = 0;
+    while( options[len++] )
+    {
+        if( strlen(options[len]) > max_len)
+        {
+            max_len = strlen(options[len]);
+        }
+    }
+
+    draw_box(x, y, max_len, len + 2, 'd');
+    cur_pos(++x, ++y);
+
+    c = '0';
+    do
+    {
+        if( c == 'w' && choice > 0 )
+        {
+            --choice;
+        }
+        else if( c == 's' && choice < max_len )
+        {
+            ++choice;
+        }
+
+        for(i = 0; i < len; ++i)
+        {
+            cur_pos(x+i, y);
+            if( i == choice)
+            {
+                attr(REV_VID);
+            }
+            else
+            {
+                attr(OFF);
+            }
+            printf("%2d: %s", i+1, options[i]);
+        }
+    } while( (c = getch_raw()) != '\n');
+
+    return choice;
 }
 
 void
