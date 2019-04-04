@@ -94,8 +94,8 @@ void cleanup_wrap(int);
 
 void gui_init(void);
 
-void cur_pos(int,           /* cursor line position */
-             int);          /* cursor column position */
+void set_cursor(int,        /* cursor line position */
+                int);       /* cursor column position */
 
 void attr_none(void);
 void attr(ATTR);            /* text attribute */
@@ -104,18 +104,22 @@ void back(BACK);            /* ISO 6429 color code */
 
 /* terminal interface */
 
+/* set the terminal to standard mode */
 void std_mode(void);
+
+/* set the terminal to raw mode */
 void raw_mode(void);
 
+/* get a character in raw mode */
 int getch_raw();
 
 /* bell */
-
 void bell(void);
 
-/* rendering */
+/* rendering / UI */
 
-void clear(void);           /* clear the terminal */
+/* clear the terminal */
+void clear(void);
 
 void heatmap(int**,         /* data */
              int,           /* rows */
@@ -125,15 +129,27 @@ void heatmap(int**,         /* data */
 
 /* returns selected option index */
 int optionbox(const char**, /* options array */
-               int,         /* top left row index of box */
-               int);        /* top left column index of box */
+              int,          /* top left row index of box */
+              int);         /* top left column index of box */
 
+/* get an integer from user */
+int query_int(int,          /* top left row index of box */
+              int,          /* top left column index of box */
+              char*);       /* prompt */
+
+/* get an integer from user */
+double query_double(int,    /* top left row index of box */
+                    int,    /* top left column index of box */
+                    char*); /* prompt */
+
+/* fill a space with a gradient */
 void grad_fill(int,         /* top left corner line */ 
                int,         /* tope left corner column */
                int,         /* int width (overall) */
                int,         /* int height (overall) */
                const char); /* mode (l - light, m - medium, h - heavy) */
 
+/* draw a box with specified character set */
 void draw_box(int,          /* top left corner line */
               int,          /* top left corner column */
               int,          /* int width (inside box) */

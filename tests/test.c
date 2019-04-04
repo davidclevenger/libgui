@@ -144,4 +144,14 @@ int main()
     printf("You chose: %d %s\n", choice, options[choice]);
 	sleep(2);
 
+    int my_int = query_int(1,1,"Type an integer:");
+    printf("You typed %d\n", my_int);
+
+    sleep(2);
+
+    double my_double = query_double(1,1,"Type a double:");
+    printf("You typed %f\n", my_double);
+
+    sleep(2);
+
 }

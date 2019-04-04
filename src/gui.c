@@ -58,11 +58,11 @@ gui_init(void)
 
     /* clear screen and position cursor */
     clear();
-    cur_pos(0,0);
+    set_cursor(0,0);
 }
 
 void
-cur_pos(int x, int y)
+set_cursor(int x, int y)
 {
     if( x < 0 || y < 0 ) return;
 
@@ -157,7 +157,7 @@ void
 clear(void)
 {
     printf("\x1B[2J");
-    cur_pos(0, 0);
+    set_cursor(0, 0);
 }
 
 void
@@ -167,7 +167,7 @@ heatmap(int** data, int r, int c, int x, int y)
     int min = INT_MAX;
     int max = INT_MIN;
 
-    cur_pos(x,0);
+    set_cursor(x,0);
 
     for( i = 0; i < r; i++)
     {
@@ -235,7 +235,7 @@ optionbox(const char** options, int x, int y)
     }
 
     draw_box(x, y, max_len + 5, len, 'd');
-    cur_pos(++x, ++y);
+    set_cursor(++x, ++y);
 
     c = '0';
     do
@@ -249,7 +249,7 @@ optionbox(const char** options, int x, int y)
 				break;
 
 			case 'W':
-					choice = 0;
+				choice = 0;
 				break;
 
 			case 's':
@@ -258,13 +258,13 @@ optionbox(const char** options, int x, int y)
 				break;
 
 			case 'S':
-					choice = len - 1;
+				choice = len - 1;
 				break;
 		}
 
         for(i = 0; i < len; ++i)
         {
-            cur_pos(x+i, y);
+            set_cursor(x+i, y);
             if( i == choice)
             {
                 attr(REV_VID);
@@ -279,8 +279,59 @@ optionbox(const char** options, int x, int y)
     } while( (c = getch_raw()) != '\n');
 
 	attr_none();
-
     return choice;
+}
+
+int query_int(int x, int y, char* prompt)
+{
+    char raw[20];
+    int height = 1, width;
+    if( prompt == NULL )
+    {
+        width = 20;
+    }
+    else
+    {
+        width = strlen(prompt) + 20;
+    }
+
+    draw_box(x,y, width, height, 'd');
+    set_cursor(x+1, y+1);
+    if( prompt )
+    {
+        printf("%s", prompt);
+    }
+
+    fgets(raw, 20, stdin);
+    clear();
+    return atoi(raw);
+
+}
+
+double query_double(int x, int y, char* prompt)
+{
+    
+    char raw[20];
+    int height = 1, width;
+    if( prompt == NULL )
+    {
+        width = 10;
+    }
+    else
+    {
+        width = strlen(prompt) + 1 + 10;
+    }
+
+    draw_box(x,y, width, height, 'd');
+    set_cursor(x+1, y+1);
+    if( prompt )
+    {
+        printf("%s ", prompt);
+    }
+
+    fgets(raw, 20, stdin);
+    clear();
+    return atof(raw);
 }
 
 void
@@ -308,7 +359,7 @@ grad_fill(int x, int y, int w, int h, const char mode)
 
     for(i = 0; i < h; i++)
     {
-        cur_pos(x + i, y);
+        set_cursor(x + i, y);
         for(j = 0; j < w; j++)
         {
             DRAW(pick);
@@ -322,7 +373,7 @@ void
 draw_box(int x, int y, int w, int h, const char mode)
 {
     /* set the drawing location */
-    cur_pos(x, y);
+    set_cursor(x, y);
 
     switch(mode)
     {
@@ -364,7 +415,7 @@ draw_box_s(int x, int y, int w, int h)
     /* middle layers */
     for(j = 0; j < h; j++)
     {
-        cur_pos(x+j+1, y);
+        set_cursor(x+j+1, y);
         DRAW(BOX_VER_S);
         for(i = 0; i < w; i++)
         {
@@ -373,7 +424,7 @@ draw_box_s(int x, int y, int w, int h)
         DRAW(BOX_VER_S);
     }
 
-    cur_pos(x+j+1, y);
+    set_cursor(x+j+1, y);
     
     /* last layer */
     DRAW(BOX_BLC_S);
@@ -401,7 +452,7 @@ draw_box_d(int x, int y, int w, int h)
     /* middle layers */
     for(j = 0; j < h; j++)
     {
-        cur_pos(x+j+1, y);
+        set_cursor(x+j+1, y);
         DRAW(BOX_VER_D);
         for(i = 0; i < w; i++)
         {
@@ -410,7 +461,7 @@ draw_box_d(int x, int y, int w, int h)
         DRAW(BOX_VER_D);
     }
 
-    cur_pos(x+j+1, y);
+    set_cursor(x+j+1, y);
     
     /* last layer */
     DRAW(BOX_BLC_D);
@@ -439,7 +490,7 @@ draw_box_f(int x, int y, int w, int h)
     for(j = 0; j < h; j++)
     {
 
-        cur_pos(x+j+1, y);
+        set_cursor(x+j+1, y);
         DRAW(BOX_VER_F);
         for(i = 0; i < w; i++)
         {
@@ -448,7 +499,7 @@ draw_box_f(int x, int y, int w, int h)
         DRAW(BOX_VER_F);
     }
 
-    cur_pos(x+j+1, y);
+    set_cursor(x+j+1, y);
 
     /* last layer */
     DRAW(BOX_COR_F);
